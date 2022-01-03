@@ -1,0 +1,1 @@
+name='Jajecznica' ingredients=[jajka] recipe='Jajka umyć, wbić na patelnię i wymieszać za pomocą drewnianej szpatułki. Smażyć na małym ogniu, co jakiś czas mieszając za pomocą drewnianej szpatułki aż do ścięcia jajek. Nie smażyć za długo, gdyż grozi to przesuszeniem jajek. Po ścięciu jajek przełożyć jajecznicę na talerz.'
