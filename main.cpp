@@ -13,26 +13,20 @@ using namespace std;
 
 int main() {
 //obsluga pliku
-    string file="recipesBase.txt";
-    std::fstream fileRecipes;
-    fileRecipes.open(file);
-    if(!fileRecipes.good()){
-        cout<<"Plik nie istnieje. Czy chcesz utworzyć plik z przepisami? t/n"<<endl;
-        char choice;
-        cin>>choice;
-        if(choice=='t'){
-            ofstream fileRecipes(file);
-            cout<<"Plik został utworzony. ";
-        }
-        else{
-            cout<<"Program zostanie zakończony, ponieważ nie może działać bez pliku z przepisami."<<endl;
-        }
-    }
+//    string file="recipesBase.txt";
+//    fstream fileRecipes=openFile(file);
 //obsluga pliku
     
-vector<recipes> analysedFile=analyseRecipeFile(fileRecipes);
-    cout<<"hello";
+//vector<recipes> analysedFile=analyseRecipeFile(fileRecipes);
+   /*
+    fileRecipes=openFile(file);
+    addRecipe(fileRecipes);*/
     
+//    vector <string> foundIngredients=searchIngredients();
+//    vector <string> chosenIngredients=chooseIngredients(foundIngredients);
+//    searchRecipes(chosenIngredients);
+
+    menu();
     
     return 0;
 }

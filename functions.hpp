@@ -18,7 +18,20 @@ public:
     std::string recipe;
 };
 
+std::fstream openFile(std::string file);
 std::vector<recipes> analyseRecipeFile(std::fstream &file);
-std::vector<std::string> separateBy(std::string str, char by);
+std::vector<std::string> separateBy(std::string str, char by, bool deleteSpaces=0);
+void addRecipe();
+void deleteRecipe();
+std::vector <std::string> searchIngredients();
+//std::vector <recipes> searchRecipes();
+std::vector <recipes> searchRecipes(std::vector <int> chosenIngredients);
+std::vector <std::string> chooseIngredients(std::vector <std::string> Ingredients);
+std::vector <recipes> searchRecipes(std::vector <std::string> chosenIngredients);
+void menu();
+void show();
+void searchingRecipes();
+void showBottomMenu();
+bool isNumber(const std::string& str);
 
 #endif /* functions_hpp */
