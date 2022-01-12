@@ -14,18 +14,18 @@
 #include <regex>
 using namespace std;
 
+bool endProgram=1;
+
 fstream openFile(string file){
     string directory=std::filesystem::current_path();
     std::fstream fileRecipes;
     fileRecipes.open(directory+"/"+file);
-    //fileRecipes.open("/Users/a1502/Documents/C++/Studia/1SEM/cozjesc_projekt_zaliczeniowy/Build/Products/Debug/recipesBase.txt");
     if(!fileRecipes.good()){
         cout<<"Plik nie istnieje. Czy chcesz utworzyć plik z przepisami? t/n"<<endl;
         char choice;
         cin>>choice;
         if(choice=='t'){
             ofstream fileRecipes(directory+"/"+file);
-            //ofstream fileRecipes("/Users/a1502/Documents/C++/Studia/1SEM/cozjesc_projekt_zaliczeniowy/Build/Products/Debug/recipesBase.txt");
             cout<<"Plik został utworzony. ";
         }
         else{
@@ -76,13 +76,13 @@ vector<recipes> analyseRecipeFile(fstream &file){
         object->name=temp;
         temp="";
 //tablica skladnikow
-        for(int i=line.find("[")+1; line[i]!=']'; i++){
+        for(int i=(int)line.find("[")+1; line[i]!=']'; i++){
             temp+=line[i];
         }
         object->ingredients=separateBy(temp, ',');
         temp="";
 //przepis
-        for(int i=line.find("recipe='")+8; line[i]!=39; i++){
+        for(int i=(int)line.find("recipe='")+8; line[i]!=39; i++){
             temp+=line[i];
         }
         object->recipe=temp;
@@ -209,8 +209,7 @@ vector <string> chooseIngredients(vector <string> Ingredients){
         return chosenIngredients;
     }
     else{
-        menu();
-        return vector <string>{};
+        throw exception();
     }
 }
 
@@ -242,9 +241,9 @@ vector <recipes> searchRecipes(vector <string> chosenIngredients){
         cin.clear();
         cin.sync();
         getline(cin, n);
-        if(!isNumber(n)) menu();
-        else if(stoi(n)>0 || (stoi(n)<=possibleRecipes.size() && stoi(n)>=1)) cout<<possibleRecipes[stoi(n)-1].recipe<<endl;
-        else menu();
+        if(!isNumber(n)) throw exception();
+        else if(n.length() > 0 && (stoi(n)>0 || (stoi(n)<=possibleRecipes.size() && stoi(n)>=1))) cout<<possibleRecipes[stoi(n)-1].recipe<<endl;
+        else throw exception();
     }
     return possibleRecipes;
 }
@@ -289,6 +288,8 @@ void searchingRecipes(){
 }
 
 void menu(){
+    while(endProgram) {
+        try {
     system("clear");
     cout<<R"(
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -316,9 +317,13 @@ void menu(){
     else if(choice=="2") addRecipe();
     else if(choice=="3") deleteRecipe();
     else if(choice=="4") searchingRecipes();
-    else if(choice=="5") system("exit");
-    else{
-        menu();
+    else if(choice=="5") {
+        break;
+        
+    }
+        } catch(exception e) {
+            
+        }
     }
     
 //    switch(stoi(choice)){
@@ -347,11 +352,8 @@ void showBottomMenu(){
     cin.clear();
     cin.sync();
     getline(cin, choice);
-    if(choice=="0") system("exit");
-    else if(choice=="menu") menu();
-    else{
-        menu();
-    }
+    if(choice=="0") endProgram=0;
+    else if(choice=="menu") return;
 }
     
 

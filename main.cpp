@@ -11,22 +11,7 @@
 
 using namespace std;
 
-int main() {
-//obsluga pliku
-//    string file="recipesBase.txt";
-//    fstream fileRecipes=openFile(file);
-//obsluga pliku
-    
-//vector<recipes> analysedFile=analyseRecipeFile(fileRecipes);
-   /*
-    fileRecipes=openFile(file);
-    addRecipe(fileRecipes);*/
-    
-//    vector <string> foundIngredients=searchIngredients();
-//    vector <string> chosenIngredients=chooseIngredients(foundIngredients);
-//    searchRecipes(chosenIngredients);
-
+int main(int argc, char *argv[]) {
     menu();
-    
     return 0;
 }
