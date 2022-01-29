@@ -8,12 +8,6 @@
 //Biblioteki potrzebne do dzialania programu
 
 #include "functions.hpp"
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <vector>
-#include <filesystem>
-#include <regex>
 using namespace std;
 
 //zmienna determinujaca dalsze dzialanie programu, przy zmianie na 0 program sie zatrzymuje.
