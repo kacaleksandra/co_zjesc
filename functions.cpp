@@ -5,6 +5,8 @@
 //  Created by Aleksandra on 29/12/2021.
 //
 
+//Biblioteki potrzebne do dzialania programu
+
 #include "functions.hpp"
 #include <iostream>
 #include <fstream>
@@ -14,12 +16,15 @@
 #include <regex>
 using namespace std;
 
+//zmienna determinujaca dalsze dzialanie programu, przy zmianie na 0 program sie zatrzymuje.
 bool endProgram=1;
 
+//funkcja otwierajaca plik o podanej w argumencie nazwie.
 fstream openFile(string file){
     string directory=std::filesystem::current_path();
     std::fstream fileRecipes;
     fileRecipes.open(directory+"/"+file);
+//sprawdzenie poprawnosci otwarcia pliku i ewentualnie tworzenie pliku z przepisami.
     if(!fileRecipes.good()){
         cout<<"Plik nie istnieje. Czy chcesz utworzyć plik z przepisami? t/n"<<endl;
         char choice;
@@ -35,6 +40,7 @@ fstream openFile(string file){
     return fileRecipes;
 }
 
+//funkcja rozdzielajaca podany string podzielony danym znakiem.
 vector<string> separateBy(string str, char by, bool deleteSpaces){
     vector<string> separated;
     string temp="";
@@ -55,8 +61,9 @@ vector<string> separateBy(string str, char by, bool deleteSpaces){
     return separated;
 }
 
-
+//funkcja analizujaca plik z przepisami i porzadkujaca go do wektora przyjmujacego klasy recipes, ktore zawieraja nazwe, skladniki i przepis.
 vector<recipes> analyseRecipeFile(fstream &file){
+//sprawdzenie czy plik nie jest pusty
     file.seekg(0, ios::end);
     if(file.tellg()==0) return {};
     else{
@@ -67,27 +74,27 @@ vector<recipes> analyseRecipeFile(fstream &file){
     while(file){
         getline(file, line);
         if(!(line=="")){
-        //recipes object;
-        recipes* object=new recipes;
+//recipes object;
+        recipes object;
 //nazwa potrawy
         for(int i=6; line[i]!=39; i++){
             temp+=line[i];
         }
-        object->name=temp;
+        object.name=temp;
         temp="";
 //tablica skladnikow
         for(int i=(int)line.find("[")+1; line[i]!=']'; i++){
             temp+=line[i];
         }
-        object->ingredients=separateBy(temp, ',');
+        object.ingredients=separateBy(temp, ',');
         temp="";
 //przepis
         for(int i=(int)line.find("recipe='")+8; line[i]!=39; i++){
             temp+=line[i];
         }
-        object->recipe=temp;
+        object.recipe=temp;
         temp="";
-        recipe.push_back(*object);
+        recipe.push_back(object);
     }
     }
     file.close();
@@ -95,8 +102,7 @@ vector<recipes> analyseRecipeFile(fstream &file){
     }
 }
 
-//dodawanie przepisow
-
+//funkcja pozwalajaca uzytkownikowi dodawac przepisy
 void addRecipe(){
     fstream file=openFile("recipesBase.txt");
     file.seekg(0, ios::end);
@@ -127,8 +133,7 @@ void addRecipe(){
     showBottomMenu();
 }
 
-//usuwanie przepisow
-
+//funkcja pozwalajaca usuwac przepisy
 void deleteRecipe(){
     fstream fileTemp=openFile("recipesBase.txt");
     string name=""; string line=""; string temp="";
@@ -143,7 +148,7 @@ void deleteRecipe(){
     getline(cin, name);
     string toFind="name='"+name;
     bool flag=0;
-    
+//szukanie danego przepisu w pliku
     ofstream out("outfile.txt");
     while(getline(file,line))
        {
@@ -163,8 +168,7 @@ void deleteRecipe(){
     
 }
 
-//szukanie mozliwych skladnikow
-
+//szukanie skladnikow, ktore wystepuja w jakimkolwiek przepisie
 vector <string> searchIngredients(){
     fstream fileRecipes=openFile("recipesBase.txt");
     vector<recipes> analysedFile=analyseRecipeFile(fileRecipes);
@@ -190,6 +194,7 @@ vector <string> searchIngredients(){
                return ingredients;
 }
 
+//funkcja pozwalajaca uzytkownikowi na wybranie skladnikow z wygenerowanej wczesniej listy i analiza stringa podanego przez uzytkownika
 vector <string> chooseIngredients(vector <string> Ingredients){
     cout<<"Wypisz numery, które wybierasz po przecinku (np. 1,2,3): ";
     string chosenS="";
@@ -213,6 +218,7 @@ vector <string> chooseIngredients(vector <string> Ingredients){
     }
 }
 
+//szukanie w pliku przepisow, ktore spelniaja skladniki podane przez uzytkownika
 vector <recipes> searchRecipes(vector <string> chosenIngredients){
     vector <recipes> possibleRecipes;
     fstream fileRecipes=openFile("recipesBase.txt");
@@ -229,13 +235,14 @@ vector <recipes> searchRecipes(vector <string> chosenIngredients){
     }
     
         fileRecipes.close();
-    if(possibleRecipes.size()==0) cout<<"Żaden przepis nie jest możliwy do wykonania z podanychs składników. "<<endl;
+    if(possibleRecipes.size()==0) cout<<"Żaden przepis nie jest możliwy do wykonania z podanych składników. "<<endl;
     else{
     cout<<"Możliwe przepisy to: "<<endl;
     for(int i=0; i<possibleRecipes.size(); i++){
         cout<<i+1<<". "<<possibleRecipes[i].name<<endl;
     }
     
+//wyswietlenie przepisu na zyczenie uzytkownika
     cout<<"Czy chcesz zobaczyć przepis którejś z tych potraw? Jak tak, to podaj numer potrawy. Jeżeli nie to wpisz 0: ";
     string n="";
         cin.clear();
@@ -248,14 +255,16 @@ vector <recipes> searchRecipes(vector <string> chosenIngredients){
     return possibleRecipes;
 }
 
+//funkcja sprawdzaca czy podany string jest intem
 bool isNumber(const string& str)
 {
-    for (char const &c : str) {
-        if (std::isdigit(c) == 0) return false;
+    for (char const &c : str) { //przechodzi przez kazdy element str i przechowuje go w c jako alias
+        if (isdigit(c) == 0) return false;
     }
     return true;
 }
 
+//funkcja wypisujaca wszystkie wpisane przepisy
 void show(){
     fstream fileRecipes=openFile("recipesBase.txt");
     fileRecipes.seekg(0, ios::end);
@@ -273,13 +282,14 @@ void show(){
         }
         cout<<"Przepis: "<<analysedFile[i].recipe<<endl;
     
-    }
+        }
     }
     fileRecipes.close();
     
     showBottomMenu();
 }
 
+//funkcja zbierajaca wszystkie funkcje sluzace do wygenerowania mozliwych posilkow z podanych skladnikow
 void searchingRecipes(){
     vector <string> foundIngredients=searchIngredients();
     vector <string> chosenIngredients=chooseIngredients(foundIngredients);
@@ -287,6 +297,8 @@ void searchingRecipes(){
     showBottomMenu();
 }
 
+
+//funkcja wyswietlajaca menu i pozwalajaca uzytkownikowi wybrac co chce zrobic
 void menu(){
     while(endProgram) {
         try {
@@ -325,26 +337,9 @@ void menu(){
             
         }
     }
-    
-//    switch(stoi(choice)){
-//        case 1: show();
-//            break;
-//        case 2: addRecipe();
-//            break;
-//        case 3: deleteRecipe();
-//            break;
-//        case 4: searchingRecipes();
-//            break;
-//        default:
-//            cin.ignore();
-//            cin.clear();
-//            cin.sync();
-//            menu();
-//            break;
-//    }
-
 }
 
+//funkcja wyswietlajaca dolne menu
 void showBottomMenu(){
     cout<<"\n\n\n\n";
     cout<<"Jeżeli chcesz wrócić do menu głównego wpisz 'menu'. Aby zakończyć program wpisz 0.: ";

@@ -5,8 +5,6 @@
 //  Created by Aleksandra on 29/12/2021.
 //
 
-#include <iostream>
-#include <fstream>
 #include "functions.hpp"
 
 using namespace std;
