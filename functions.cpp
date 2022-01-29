@@ -35,6 +35,7 @@ fstream openFile(string file){
         }
         else{
             cout<<"Program zostanie zakończony, ponieważ nie może działać bez pliku z przepisami."<<endl;
+            endProgram=false;
         }
     }
     return fileRecipes;
